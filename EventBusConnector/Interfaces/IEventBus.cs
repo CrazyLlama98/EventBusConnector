@@ -17,6 +17,7 @@ namespace EventBusConnector.Interfaces
 
         Task SubscribeAsync(IEventHandler eventHandler, string subject);
 
-        Task SubscribeAsync<TEvent>(IEventHandler<TEvent> eventHandler, string subject = null);
+        Task SubscribeAsync<TEvent>(IEventHandler<TEvent> eventHandler, string subject = null)
+            where TEvent : class;
     }
 }

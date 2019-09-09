@@ -7,7 +7,7 @@ namespace EventBusConnector.Kafka
 {
     public class KafkaPublisher : IPublisher
     {
-        private bool disposedValue = false;
+        private bool _disposedValue = false;
         protected IProducer<Null, string> Producer { get; }
         protected ProducerConfig Config { get; }
 
@@ -29,14 +29,14 @@ namespace EventBusConnector.Kafka
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            if (!_disposedValue)
             {
                 if (disposing)
                 {
                     Producer.Dispose();
                 }
 
-                disposedValue = true;
+                _disposedValue = true;
             }
         }
 

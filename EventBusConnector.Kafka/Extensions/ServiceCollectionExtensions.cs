@@ -15,21 +15,14 @@ namespace EventBusConnector.Kafka.Extensions
             var producerConfig = new ProducerConfig();
             var consumerConfig = new ConsumerConfig();
 
-            if (producerOptions != null)
-            {
-                producerOptions.Invoke(producerConfig);
-            }
-
-            if (consumerOptions != null)
-            {
-                consumerOptions.Invoke(consumerConfig);
-            }
+            producerOptions?.Invoke(producerConfig);
+            consumerOptions?.Invoke(consumerConfig);
 
             services
                 .AddSingleton(producerConfig)
                 .AddSingleton(consumerConfig)
                 .AddSingleton<IPublisher, KafkaPublisher>()
-                .AddSingleton<IConsumer, KafkaConsumer>();
+                .AddSingleton<ISubscriber, KafkaSubscriber>();
 
             return services;
         }

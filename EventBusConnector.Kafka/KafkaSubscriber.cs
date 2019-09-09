@@ -2,26 +2,39 @@
 using EventBusConnector.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace EventBusConnector.Kafka
 {
-    public class KafkaConsumer : IConsumer
+    public class KafkaSubscriber : ISubscriber
     {
-        private bool disposedValue = false;
+        private bool _disposedValue = false;
         protected ConsumerConfig Config { get; set; }
-        protected Dictionary<string, IConsumer<Null, string>> Consumers { get; }
+        protected Dictionary<string, IConsumer<Null, string>> Consumers { get; } = new Dictionary<string, IConsumer<Null, string>>();
 
-        public KafkaConsumer(ConsumerConfig config)
+        public KafkaSubscriber(ConsumerConfig config)
         {
             Config = config;
         }
 
-        public string Consume(string subject)
+        public async Task SubscribeAsync<TEvent>(string subject, IEventHandler<TEvent> eventHandler)
+            where TEvent : class
         {
             var consumer = GetOrAddConsumer(subject);
             var result = consumer.Consume();
 
-            return result.Value;
+            var @event = JsonConvert.DeserializeObject<TEvent>(result.Value);
+
+            await eventHandler.HandleAsync(@event);
+        }
+
+        public async Task SubscribeAsync(string subject, IEventHandler eventHandler)
+        {
+            var consumer = GetOrAddConsumer(subject);
+            var result = consumer.Consume();
+            
+            await eventHandler.HandleAsync(result.Value);
         }
 
         private IConsumer<Null, string> GetOrAddConsumer(string subject)
@@ -40,7 +53,7 @@ namespace EventBusConnector.Kafka
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            if (!_disposedValue)
             {
                 if (disposing)
                 {
@@ -50,10 +63,10 @@ namespace EventBusConnector.Kafka
                     }
                 }
 
-                disposedValue = true;
+                _disposedValue = true;
             }
         }
-        ~KafkaConsumer()
+        ~KafkaSubscriber()
         {
             Dispose(false);
         }
