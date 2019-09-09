@@ -7,7 +7,7 @@ namespace EventBusConnector.Interfaces
         Task HandleAsync(string payload);
     }
 
-    public interface IEventHandler<TEvent> : IEventHandler
+    public interface IEventHandler<in TEvent>
     {
         Task HandleAsync(TEvent @event);
     }
