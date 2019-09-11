@@ -46,7 +46,7 @@ steps:
     projects: '**/*.Test.csproj'
     arguments: '--configuration $(buildConfiguration) /p:CollectCoverage=true /p:CoverletOutputFormat=opencover'
 
-- script: '- curl -s https://codecov.io/bash > codecov'
+- script: 'curl -s https://codecov.io/bash > codecov'
 - script: 'chmod +x codecov'
 - script: './codecov -f "./FluentApiGenericRepository.Test/coverage.opencover.xml" -t 679eb27b-0028-4823-9311-60c2ab1b36c4'
 
