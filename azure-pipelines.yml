@@ -48,7 +48,7 @@ steps:
 
 - script: 'curl -s https://codecov.io/bash > codecov'
 - script: 'chmod +x codecov'
-- script: './codecov -f "./FluentApiGenericRepository.Test/coverage.opencover.xml" -t 679eb27b-0028-4823-9311-60c2ab1b36c4'
+- script: './codecov -f "./EventBusConnector.Test/coverage.opencover.xml" -t $CODECOV_APIKEY'
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet pack' 
@@ -63,9 +63,8 @@ steps:
   displayName: 'nuget push'
   inputs:
     command: 'push'
-    feedsToUse: 'select'
     packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
-    nuGetFeedType: 'internal'
-    publishVstsFeed: 'andreiriclea98'
+    nuGetFeedType: external
+    publishFeedCredentials: 'Nuget org'
     versioningScheme: 'off'
     allowPackageConflicts: true
