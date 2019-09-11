@@ -48,7 +48,7 @@ steps:
 
 - script: 'curl -s https://codecov.io/bash > codecov'
 - script: 'chmod +x codecov'
-- script: './codecov -f "./EventBusConnector.Test/coverage.opencover.xml" -t $CODECOV_APIKEY'
+- script: './codecov -f "./EventBusConnector.Test/coverage.opencover.xml" -t $(Codecov_apikey)'
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet pack' 
