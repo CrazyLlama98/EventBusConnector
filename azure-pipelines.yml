@@ -76,5 +76,7 @@ steps:
     action: 'create'
     target: '$(Build.SourceVersion)'
     tagSource: 'gitTag'
+    tagPattern: 'v$(GitVersion.NuGetVersionV2)'
+    title: 'v$(GitVersion.NuGetVersionV2)'
     changeLogCompareToRelease: 'lastFullRelease'
     changeLogType: 'commitBased'
