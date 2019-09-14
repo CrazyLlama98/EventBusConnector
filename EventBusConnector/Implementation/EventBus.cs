@@ -22,7 +22,7 @@ namespace EventBusConnector.Implementation
         {
             var payload = JsonConvert.SerializeObject(@event);
 
-            await Publisher.SendAsync(subject ?? nameof(TEvent), payload);
+            await Publisher.SendAsync(subject ?? typeof(TEvent).Name, payload);
         }
 
         public async Task PublishAsync(string payload, string subject)
@@ -38,14 +38,14 @@ namespace EventBusConnector.Implementation
         public async Task SubscribeAsync<TEvent>(IEventHandler<TEvent> eventHandler, string subject = null)
             where TEvent : class
         {
-            await Subscriber.SubscribeAsync(subject, eventHandler);
+            await Subscriber.SubscribeAsync(subject ?? typeof(TEvent).Name, eventHandler);
         }
 
         public void Publish<TEvent>(TEvent @event, string subject = null) where TEvent : class
         {
             var payload = JsonConvert.SerializeObject(@event);
 
-            Publisher.Send(subject ?? nameof(TEvent), payload);
+            Publisher.Send(subject ?? typeof(TEvent).Name, payload);
         }
 
         public void Publish(string payload, string subject)
