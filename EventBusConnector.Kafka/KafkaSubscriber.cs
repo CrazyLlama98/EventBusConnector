@@ -35,9 +35,12 @@ namespace EventBusConnector.Kafka
         public async Task SubscribeAsync(string subject, IEventHandler eventHandler)
         {
             var consumer = GetOrAddConsumer(subject);
-            var result = consumer.Consume();
-            
-            await eventHandler.HandleAsync(result.Value);
+            while (true)
+            {
+                var result = consumer.Consume();
+
+                await eventHandler.HandleAsync(result.Value);
+            }
         }
 
         private IConsumer<Null, string> GetOrAddConsumer(string subject)
